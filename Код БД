@@ -1,0 +1,73 @@
+Код для создания БД и заполнения созднанных таблиц
+CREATE DATABASE Voenny_Okrug;
+
+USE Voenny_Okrug;
+
+CREATE TABLE Vid_Voysk (
+    IDType_of_troops INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Mesto_Dislokatsii (
+    IDLocation INT AUTO_INCREMENT PRIMARY KEY,
+    Сountry VARCHAR(255) NOT NULL,
+    City VARCHAR(255) NOT NULL,
+    Address VARCHAR(255) NOT NULL,
+    Occupied_area VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Chast (
+    IDPart INT AUTO_INCREMENT PRIMARY KEY,
+    Number_part VARCHAR(255) NOT NULL,
+    IDLocation INT,
+    IDType_of_troops INT,
+    Number_of_mouths INT NOT NULL,
+    FOREIGN KEY (IDLocation) REFERENCES Mesto_Dislokatsii(IDLocation),
+    FOREIGN KEY (IDType_of_troops) REFERENCES Vid_Voysk(IDType_of_troops)
+);
+
+CREATE TABLE Rota (
+    IDCompany INT AUTO_INCREMENT PRIMARY KEY,
+    Name_company VARCHAR(255) NOT NULL,
+    Number_of_employees INT NOT NULL,
+    IDPart INT,
+    FOREIGN KEY (IDPart) REFERENCES Chast(IDPart)
+);
+
+CREATE TABLE Lichnyy_Sostav (
+    IDPersonnel INT AUTO_INCREMENT PRIMARY KEY,
+    Surname VARCHAR(255) NOT NULL,
+    IDCompany INT,
+    Post VARCHAR(255),
+    Year_of_birth INT,
+    Year_of_enlistment INT,
+    Length_of_service INT,
+    Awards TEXT,
+    Participation_ in_military_events TEXT,
+    FOREIGN KEY (IDCompany) REFERENCES Rota(IDCompany)
+);
+
+----------------------------------------------------------------------------------------------------------------
+INSERT INTO Vid_Voysk (Name) VALUES ('Пехота'), ('Танковые войска'), ('Артиллерия');
+
+INSERT INTO Mesto_Dislokatsii (Сountry, City, Address, Occupied_area) VALUES 
+('Россия', 'Москва', 'Улица Ленина, 1', 15000),
+('Россия', 'Санкт-Петербург', 'Невский проспект, 2', 12000),
+('Беларусь', 'Минск', 'Улица Победы, 10', 8000);
+
+INSERT INTO Chast (Number_part, IDLocation, IDType_of_troops, Number_of_ mouths) VALUES 
+('Часть 123', 1, 1, 3),
+('Часть 456', 2, 2, 2),
+('Часть 789', 3, 3, 4);
+
+INSERT INTO Rota (Name_company, Number_of_employees, IDPart) VALUES 
+('Рота 1', 50, 1),
+('Рота 2', 60, 1),
+('Рота 3', 45, 2),
+('Рота 4', 55, 3);
+
+INSERT INTO Lichnyy_Sostav (Surname, IDCompany, Post, Year_of_birth, Year_of_enlistment, Length_of_service, Awards, Participation_ in_military_events) VALUES 
+('Иванов', 1, 'Сержант', 1990, 2010, 11, 'Орден Мужества', 'Участие в учениях'),
+('Петров', 2, 'Лейтенант', 1988, 2012, 9, 'Медаль За службу', 'Участие в параде'),
+('Сидоров', 3, 'Капитан', 1985, 2008, 14, 'Орден Отечества', 'Участие в миротворческой миссии'),
+('Кузнецов', 4, 'Рядовой', 1995, 2020, 2, NULL, 'Участие в локальных учениях');
